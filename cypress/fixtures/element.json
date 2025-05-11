@@ -1,0 +1,34 @@
+{
+  "elements":{
+    "homepage": {
+      "signUpButton": ".Header2_header__nav__btn__wRKfY>div:nth-child(2)>button",
+      "loginButton": ".Header2_header__nav__btn__wRKfY>div:nth-child(1)>button"
+    },
+    "signupPage": {
+      "signUpText": "h3.Login_logintext__title__0DSKp.Login_mb_10__mYSNi",
+      "fullNameField":"input[id='fullname']",
+      "businessNameField": "input[id='businessname']",
+      "businessEmailField": "input[id='businessemail']",
+      "businessPhoneField": "#businessphonenumber",
+      "businessRegField": "input[id='businessRegNum']",
+      "goBackIcon": ".Login_rightside__back__W5kq5",
+      "goBackIconWithin": "svg:nth-child(1) > path:nth-child(1)",
+      "button": "button",
+      "websiteField": "input[id='website']",
+      "instagramField":"input[id='instagramHandle']",
+      "twitterField":"input[id='twitterHandle']",
+      "howYouHearAboutUsField":".sc-cPiKLX",
+      "HowYouHeardDropDownElements": "#scrollableDiv",
+      "passwordField": "input[id='password']",
+      "OTPCodeLabel": "p[class='Onboarding_text__bold__Z-e69 Onboarding_text__color__primary__ilPVg']",
+      "OTPCodeLabelText": "Please enter the code below",
+      "signUpErrorforOptionalField": ".MimaInput_error__QkKJM"
+
+    },
+    "loginPage":{
+
+    }
+
+
+  } 
+}

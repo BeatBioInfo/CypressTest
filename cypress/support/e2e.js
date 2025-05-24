@@ -6,6 +6,7 @@ import { faker } from '@faker-js/faker';
 import './customCommand/homepage'
 import './customCommand/signUp'
 import './customCommand/commonActions'
+import 'cypress-mailosaur'
 
 
 
@@ -13,6 +14,9 @@ Cypress.on('uncaught:exception', (err) => {
     console.error('Uncaught exception:', err);   
       return false; 
   });
+
+
+
 
 // beforeEach(()=>{
 //   cy.visit('/');
@@ -26,4 +30,4 @@ Cypress.on('uncaught:exception', (err) => {
 //   cy.clickAnyButtonWithText('Sign Up')
 //   cy.assertOTPLabelIsVisible()
 // })
-            
+   

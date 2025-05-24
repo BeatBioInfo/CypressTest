@@ -8,12 +8,16 @@ describe('Attempt to sign up till you get to the OTP page with invalid inputs', 
   cy.visit('/');
   cy.clickSignUpButton()
   cy.assertAnyElementIsVisible('Sign Up')
-  cy.typeInBasicDetails()
+  cy.typeInBasicDetails() 
+  cy.clickNextButton()
+
 })
 
 afterEach(()=>{
   cy.typeInAcceptedPassword()
   cy.clickAnyButtonWithText('Sign Up')
+  cy.retrieveAndInsertOTP()
+  cy.assertAnyElementIsVisible('Thank you for signing up!')
     })
 
     it('Sign up with Twitter as the option for how did you hear about us', () => {

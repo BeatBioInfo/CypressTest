@@ -21,7 +21,7 @@ Cypress.Commands.add('typeInBusinessName', () => {
 })
 
 Cypress.Commands.add('typeInBusinessEmail', () => {
-    cy.get(signUp.businessEmailField).fill(fakerEN_NG.internet.email({provider: 'gmal.com'}))
+    cy.get(signUp.businessEmailField).type(email.emailAddress)
 })
 
 Cypress.Commands.add('typeInBusinessPhoneNumber', () => {

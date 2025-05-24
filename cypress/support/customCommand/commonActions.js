@@ -2,11 +2,27 @@ import { fakerEN_NG } from "@faker-js/faker"
 import { faker } from "@faker-js/faker/locale/en_NG"
 let signup
 let homepage
+let email
+let serverID = 'jhrt9ie3'
+let emailDomain = '@jhrt9ie3.mailosaur.net'
+let emailAddress
 
 before(()=>{
+    const checker = new Date().getTime()
+    const emailSuffix = checker.toString().substring(6,13)
+    const emailPrefix = `test${emailSuffix}`
+    emailAddress = `${emailPrefix}${emailDomain}`
+    const userDetails = {
+        emailAddress: emailAddress
+    }
+    cy.writeFile('cypress/fixtures/creds.json', JSON.stringify(userDetails, null, 2))
+  
     cy.fixture('element').then(sel =>{
         signup = sel.elements.signupPage
         homepage = sel.elements.homepage
+    })
+    cy.fixture('creds').then((cred) => {
+        email = cred
     })
 })
 
@@ -34,10 +50,11 @@ Cypress.Commands.add('assertAnyElementIsVisible', (text) => {
 })
 
 Cypress.Commands.add('typeInBasicDetailsAndBusinessRegNum', ()=>{
+    
     const inputs = [
             fakerEN_NG.person.fullName(),
             fakerEN_NG.company.buzzPhrase(),
-            fakerEN_NG.internet.email({provider: 'gmal.com'}),
+            email.emailAddress,
             fakerEN_NG.phone.number({style: "international"}),
             fakerEN_NG.string.alphanumeric({length: { min: 5, max: 10 }, casing: 'upper'})
         ]
@@ -107,6 +124,20 @@ Cypress.Commands.add('typeInBasicDetails', () =>
     cy.typeInBusinessEmail()
     cy.typeInBusinessPhoneNumber()
 })
+
+Cypress.Commands.add('retrieveAndInsertOTP', () => {
+    cy.mailosaurGetMessage(serverID, {sentTo: emailAddress})
+        .then((email) => {
+            const firstCode = email.html.codes[0] 
+            const otp = firstCode.value
+            cy.log(otp)
+            cy.get('input').each(($el, index) => {
+                cy.wrap($el).type(otp[index])
+            })
+        })
+})
+
+
 
 
 

@@ -1,21 +1,23 @@
 const { fakerEN_NG } = require("@faker-js/faker");
-const { faker } = require("@faker-js/faker");
 
 describe('Test all the options of how users heard about us', () =>
     {
         beforeEach(()=>{
-        cy.visit('/');
-        cy.clickSignUpButton()
-        cy.assertAnyElementIsVisible('Sign Up')
-        cy.typeInBasicDetailsAndBusinessRegNum()
-        cy.clickNextButton()
+                cy.visit('/');
+                cy.clickSignUpButton()
+                cy.assertAnyElementIsVisible('Sign Up')
+                cy.typeInBasicDetailsAndBusinessRegNum()
+                cy.clickNextButton()
         })
+
         afterEach(()=>{
-        cy.typeInAcceptedPassword()
-        cy.clickAnyButtonWithText('Sign Up')
-        cy.assertOTPLabelIsVisible()
+                cy.typeInAcceptedPassword()
+                cy.clickAnyButtonWithText('Sign Up')
+                cy.assertOTPLabelIsVisible()
+                cy.retrieveAndInsertOTP()
+                  cy.assertAnyElementIsVisible('Thank you for signing up!')
         })
-         
+                        
         
     it('Sign up with Twitter as the option for how did you hear about us', () => {
         cy.selectAnOptionForHowYouHeardAboutUsDropDown('Twitter')

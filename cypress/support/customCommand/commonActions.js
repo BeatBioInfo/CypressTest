@@ -4,8 +4,9 @@ let signup
 let homepage
 let email
 let serverID = 'jhrt9ie3'
-let emailDomain = '@jhrt9ie3.mailosaur.net'
+let emailDomain = '@maildrop.cc'
 let emailAddress
+let inboxID
 
 before(()=>{
     const checker = new Date().getTime()
@@ -13,7 +14,8 @@ before(()=>{
     const emailPrefix = `test${emailSuffix}`
     emailAddress = `${emailPrefix}${emailDomain}`
     const userDetails = {
-        emailAddress: emailAddress
+        emailAddress: emailAddress,
+        mailID: emailPrefix
     }
     cy.writeFile('cypress/fixtures/creds.json', JSON.stringify(userDetails, null, 2))
   
@@ -126,15 +128,56 @@ Cypress.Commands.add('typeInBasicDetails', () =>
 })
 
 Cypress.Commands.add('retrieveAndInsertOTP', () => {
-    cy.mailosaurGetMessage(serverID, {sentTo: emailAddress})
-        .then((email) => {
-            const firstCode = email.html.codes[0] 
-            const otp = firstCode.value
-            cy.log(otp)
-            cy.get('input').each(($el, index) => {
-                cy.wrap($el).type(otp[index])
-            })
-        })
+    // cy.mailosaurGetMessage(serverID, {sentTo: emailAddress})
+    //     .then((email) => {
+    //         const firstCode = email.html.codes[0] 
+    //         const otp = firstCode.value
+    //         cy.log(otp)
+    //         cy.get('input').each(($el, index) => {
+    //             cy.wrap($el).type(otp[index])
+    //         })
+    //     })
+    cy.wait(20000)
+    cy.request({
+        method: 'POST',
+        url: 'https://api.maildrop.cc/graphql',
+        headers: {
+            "content-type": "application/json"
+        },
+        body: {
+            query: `query Example { inbox(mailbox:"${email.mailID}") { id headerfrom subject date } }`,
+            variables: {}
+        }
+    }).then((response)=> {
+         inboxID = response.body.data.inbox[0].id
+         cy.log(inboxID)
+
+
+    return cy.request({
+        method: 'POST',
+        url: 'https://api.maildrop.cc/graphql',
+        headers: {
+            "content-type": "application/json"
+        },
+        body: {
+            query: `query Example { message(mailbox:"${email.mailID}", id:"${inboxID}") { id headerfrom subject date }}`,
+            variables: {}
+        }
+    }).then((response)=> {
+         const emailBody = response.body.data.message.html
+         cy.log(emailBody)
+         const parser = new DOMParser()
+         const doc = parser.parseFromString(emailBody, 'text/html')
+         cy.log(doc)
+         const code = doc.querySelector('center>table > tbody > tr:nth-child(2) p:nth-of-type(3)').textContent
+         const otp = code.trim()
+         cy.get('input[type="tel"]').each(($element, ind) => {
+            cy.wrap($element).fill(otp[ind])
+         })
+    })
+    })
+
+
 })
 
 

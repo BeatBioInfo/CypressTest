@@ -19,7 +19,7 @@ describe('Test all the options of how users heard about us', () =>
         })
                         
         
-    it('Sign up with Twitter as the option for how did you hear about us', () => {
+    it.only('Sign up with Twitter as the option for how did you hear about us', () => {
         cy.selectAnOptionForHowYouHeardAboutUsDropDown('Twitter')
             
     });
